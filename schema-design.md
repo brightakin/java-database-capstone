@@ -20,13 +20,8 @@ Basic information about patients.
 - `date_of_birth` – DATE, NOT NULL  
 - `gender` – ENUM('M', 'F', 'O'), NOT NULL  
 - `phone_number` – VARCHAR(20), NOT NULL, UNIQUE  
-- `email` – VARCHAR(100), NOT NULL, UNIQUE  
+- `email` – VARCHAR(100), NOT NULL, UNIQUE (when not null)  
 - `created_at` – DATETIME, NOT NULL, default current timestamp  
-
-**Why this design is simple:**  
-We keep only essential identity/contact fields and one primary key (`patient_id`) to link to other tables.
-
----
 
 ### 1.2. `doctors` Table
 
@@ -40,11 +35,6 @@ Basic information about doctors.
 - `phone_number` – VARCHAR(20), NULL  
 - `created_at` – DATETIME, NOT NULL, default current timestamp  
 
-**Why this design is simple:**  
-We store only the data we need to identify a doctor and contact them, plus a single primary key (`doctor_id`).
-
----
-
 ### 1.3. `admins` Table
 
 System users who can manage data (e.g., receptionists, managers).
@@ -54,11 +44,6 @@ System users who can manage data (e.g., receptionists, managers).
 - `password_hash` – VARCHAR(255), NOT NULL  
 - `role` – ENUM('SUPER_ADMIN', 'STAFF'), NOT NULL, default 'STAFF'  
 - `created_at` – DATETIME, NOT NULL, default current timestamp  
-
-**Why this design is simple:**  
-We only store what is needed for login and basic role-based access.
-
----
 
 ### 1.4. `appointments` Table
 
@@ -79,6 +64,7 @@ A flexible document for prescriptions. It uses nested objects and an array.
 
 #### Example document
 
+```jsonc
 {
   "_id": "675f0c823d5c4f00125e4b91",
 
@@ -115,3 +101,4 @@ A flexible document for prescriptions. It uses nested objects and an array.
 
   "status": "ACTIVE"          // e.g., ACTIVE or CANCELLED
 }
+```
