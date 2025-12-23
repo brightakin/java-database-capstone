@@ -1,0 +1,104 @@
+# Smart Clinic System – Database Schema Design
+
+## 1. MySQL Database Design
+
+Below each table, the columns include:
+
+- **Name**
+- **Data type**
+- **Constraints** (PK = primary key, FK = foreign key)
+
+---
+
+### 1.1. `patients` Table
+
+Basic information about patients.
+
+- `id` – INT, PK, Auto Increment, NOT NULL  
+- `first_name` – VARCHAR(50), NOT NULL  
+- `last_name` – VARCHAR(50), NOT NULL  
+- `date_of_birth` – DATE, NOT NULL  
+- `gender` – ENUM('M', 'F', 'O'), NOT NULL  
+- `phone_number` – VARCHAR(20), NOT NULL, UNIQUE  
+- `email` – VARCHAR(100), NOT NULL, UNIQUE (when not null)  
+- `created_at` – DATETIME, NOT NULL, default current timestamp  
+
+### 1.2. `doctors` Table
+
+Basic information about doctors.
+
+- `id` – INT, PK, Auto Increment, NOT NULL  
+- `first_name` – VARCHAR(50), NOT NULL  
+- `last_name` – VARCHAR(50), NOT NULL  
+- `specialization` – VARCHAR(100), NOT NULL  
+- `email` – VARCHAR(100), NOT NULL, UNIQUE  
+- `phone_number` – VARCHAR(20), NULL  
+- `created_at` – DATETIME, NOT NULL, default current timestamp  
+
+### 1.3. `admins` Table
+
+System users who can manage data (e.g., receptionists, managers).
+
+- `id` – INT, PK, Auto Increment, NOT NULL  
+- `username` – VARCHAR(50), NOT NULL, UNIQUE  
+- `password_hash` – VARCHAR(255), NOT NULL  
+- `role` – ENUM('SUPER_ADMIN', 'STAFF'), NOT NULL, default 'STAFF'  
+- `created_at` – DATETIME, NOT NULL, default current timestamp  
+
+### 1.4. `appointments` Table
+
+Connects a patient with a doctor at a specific time.
+
+- `id`: INT, Primary Key, Auto Increment, NOT NULL  
+- `doctor_id`: INT, NOT NULL, Foreign Key → `doctors.id`  
+- `patient_id`: INT, NOT NULL, Foreign Key → `patients.id`  
+- `appointment_time`: DATETIME, NOT NULL  
+- `status`: ENUM('SCHEDULED', 'COMPLETED', 'CANCELLED'), NOT NULL, default 'SCHEDULED'  
+- `reason`: VARCHAR(255), NULL
+
+## 2. MongoDB Collection Design
+
+### 2.1. `prescriptions` Collection
+
+A flexible document for prescriptions. It uses nested objects and an array.
+
+#### Example document
+
+```jsonc
+{
+  "_id": "675f0c823d5c4f00125e4b91",
+
+  "patient": {
+    "id": 1,                 // matches patients.patient_id in MySQL
+    "fullName": "John Doe"
+  },
+
+  "doctor": {
+    "id": 2,                 // matches doctors.doctor_id in MySQL
+    "fullName": "Dr. Ada Love"
+  },
+
+  "appointmentId": 10,        // matches appointments.appointment_id in MySQL
+
+  "issuedAt": "2025-12-23T09:00:00Z",
+
+  "medications": [
+    {
+      "name": "Paracetamol",
+      "dosage": "500 mg",
+      "frequency": "3 times a day",
+      "durationDays": 5
+    },
+    {
+      "name": "Ibuprofen",
+      "dosage": "200 mg",
+      "frequency": "2 times a day",
+      "durationDays": 3
+    }
+  ],
+
+  "notes": "Take with food and plenty of water.",
+
+  "status": "ACTIVE"          // e.g., ACTIVE or CANCELLED
+}
+```
