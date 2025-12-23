@@ -14,7 +14,7 @@ Below each table, the columns include:
 
 Basic information about patients.
 
-- `patient_id` – INT, PK, auto-increment, NOT NULL  
+- `id` – INT, PK, Auto Increment, NOT NULL  
 - `first_name` – VARCHAR(50), NOT NULL  
 - `last_name` – VARCHAR(50), NOT NULL  
 - `date_of_birth` – DATE, NOT NULL  
@@ -27,7 +27,7 @@ Basic information about patients.
 
 Basic information about doctors.
 
-- `doctor_id` – INT, PK, auto-increment, NOT NULL  
+- `id` – INT, PK, Auto Increment, NOT NULL  
 - `first_name` – VARCHAR(50), NOT NULL  
 - `last_name` – VARCHAR(50), NOT NULL  
 - `specialization` – VARCHAR(100), NOT NULL  
@@ -39,7 +39,7 @@ Basic information about doctors.
 
 System users who can manage data (e.g., receptionists, managers).
 
-- `admin_id` – INT, PK, auto-increment, NOT NULL  
+- `id` – INT, PK, Auto Increment, NOT NULL  
 - `username` – VARCHAR(50), NOT NULL, UNIQUE  
 - `password_hash` – VARCHAR(255), NOT NULL  
 - `role` – ENUM('SUPER_ADMIN', 'STAFF'), NOT NULL, default 'STAFF'  
@@ -49,12 +49,12 @@ System users who can manage data (e.g., receptionists, managers).
 
 Connects a patient with a doctor at a specific time.
 
-- `appointment_id` – INT, PK, auto-increment, NOT NULL  
-- `patient_id` – INT, NOT NULL, FK → `patients.patient_id`  
-- `doctor_id` – INT, NOT NULL, FK → `doctors.doctor_id`  
-- `scheduled_at` – DATETIME, NOT NULL  
-- `status` – ENUM('SCHEDULED', 'COMPLETED', 'CANCELLED'), NOT NULL, default 'SCHEDULED'  
-- `created_by_admin_id` – INT, NOT NULL, FK → `admins.admin_id`  
+- `id`: INT, Primary Key, Auto Increment, NOT NULL  
+- `doctor_id`: INT, NOT NULL, Foreign Key → `doctors.id`  
+- `patient_id`: INT, NOT NULL, Foreign Key → `patients.id`  
+- `appointment_time`: DATETIME, NOT NULL  
+- `status`: ENUM('SCHEDULED', 'COMPLETED', 'CANCELLED'), NOT NULL, default 'SCHEDULED'  
+- `reason`: VARCHAR(255), NULL
 
 ## 2. MongoDB Collection Design
 
