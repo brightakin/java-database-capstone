@@ -25,6 +25,9 @@ public class Appointment {
     @Future(message = "Appointment time must be in the future")
     private LocalDateTime appointmentTime;
 
+    @NotNull(message = "Status cannot be null")
+    private int status;
+
     @Transient
     public LocalDateTime getEndTime () {
         return appointmentTime.plusHours(1);
@@ -70,6 +73,14 @@ public class Appointment {
 
     public void setAppointmentTime(LocalDateTime appointmentTime) {
         this.appointmentTime = appointmentTime;
+    }
+
+    public int getStatus () {
+        return status;
+    }
+
+    public void setStatus (int status) {
+        this.status = status;
     }
 }
 
