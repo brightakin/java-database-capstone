@@ -1,3 +1,121 @@
+// index.js
+
+// Import required modules
+import { openModal } from "../components/modals.js";
+import { API_BASE_URL } from "../config/config.js";
+
+// API Endpoints
+const ADMIN_API = API_BASE_URL + '/admin';
+const DOCTOR_API = API_BASE_URL + '/doctor/login';
+
+// Wait until page is fully loaded
+window.onload = function () {
+    // Admin login button
+    const adminBtn = document.getElementById('adminLogin');
+    if (adminBtn) {
+        adminBtn.addEventListener('click', () => {
+            openModal('adminLogin');
+        });
+    }
+
+    // Doctor login button
+    const doctorBtn = document.getElementById('doctorLogin');
+    if (doctorBtn) {
+        doctorBtn.addEventListener('click', () => {
+            openModal('doctorLogin');
+        });
+    }
+};
+
+// -------------------------
+// Admin Login Handler
+// -------------------------
+window.adminLoginHandler = async function () {
+    const usernameInput = document.getElementById('adminUsername');
+    const passwordInput = document.getElementById('adminPassword');
+
+    if (!usernameInput || !passwordInput) {
+        alert("Username or password field not found!");
+        return;
+    }
+
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (!username || !password) {
+        alert("Please fill in both username and password.");
+        return;
+    }
+
+    const admin = { username, password };
+
+    try {
+        const response = await fetch(ADMIN_API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(admin)
+        });
+
+        if (!response.ok) {
+            alert("Invalid credentials!");
+            return;
+        }
+
+        const data = await response.json();
+        localStorage.setItem('token', data.token);
+        selectRole('admin'); // store role for rendering pages
+        window.location.href = '/adminDashboard';
+    } catch (error) {
+        console.error(error);
+        alert("An error occurred. Please try again.");
+    }
+};
+
+// -------------------------
+// Doctor Login Handler
+// -------------------------
+window.doctorLoginHandler = async function () {
+    const emailInput = document.getElementById('doctorEmail');
+    const passwordInput = document.getElementById('doctorPassword');
+
+    if (!emailInput || !passwordInput) {
+        alert("Email or password field not found!");
+        return;
+    }
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (!email || !password) {
+        alert("Please fill in both email and password.");
+        return;
+    }
+
+    const doctor = { email, password };
+
+    try {
+        const response = await fetch(DOCTOR_API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(doctor)
+        });
+
+        if (!response.ok) {
+            alert("Invalid credentials!");
+            return;
+        }
+
+        const data = await response.json();
+        localStorage.setItem('token', data.token);
+        selectRole('doctor'); // store role for rendering pages
+        window.location.href = '/doctorDashboard';
+    } catch (error) {
+        console.error(error);
+        alert("An error occurred. Please try again.");
+    }
+};
+
+
 /*
   Import the openModal function to handle showing login popups/modals
   Import the base API URL from the config file
