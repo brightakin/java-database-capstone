@@ -1,3 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Role Selection Page</title>
+    <link rel="icon" href="./assets/favicon.ico" type="image/x-icon">
+
+    <!-- CSS Links -->
+    <link rel="stylesheet" href="./assets/css/index.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+
+    <!-- JS Links for Utility -->
+    <script src="./js/util.js" defer></script>
+    <script src="./js/render.js" defer></script>
+
+    <!-- JS Links for Components -->
+    <script src="./js/components/header.js" defer></script>
+    <script src="./js/components/footer.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="wrapper">
+            <!-- Header Placeholder -->
+            <div id="header"></div>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <h2>Select Your Role</h2>
+                <button id="adminBtn" onclick="selectRole('Admin')">Admin</button>
+                <button id="doctorBtn" onclick="selectRole('Doctor')">Doctor</button>
+                <button id="patientBtn" onclick="selectRole('Patient')">Patient</button>
+            </main>
+
+            <!-- Footer Placeholder -->
+            <div id="footer"></div>
+        </div>
+    </div>
+
+    <!-- Hidden Modal -->
+    <div id="modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span id="closeModal">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Service JS -->
+    <script type="module" src="../js/services/index.js" defer></script>
+</body>
+</html>
+
+
 <!-- index.html -->
 <!-- 
 

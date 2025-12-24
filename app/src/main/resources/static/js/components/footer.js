@@ -1,3 +1,56 @@
+// footer.js
+
+function renderFooter() {
+    // Access the footer container
+    const footer = document.getElementById("footer");
+
+    if (!footer) return; // Exit if footer container is missing
+
+    // Inject HTML content
+    footer.innerHTML = `
+        <footer class="footer">
+            <!-- Branding Section -->
+            <div class="footer-logo">
+                <img src="../assets/images/logo.png" alt="Brand Logo" />
+                <p>© ${new Date().getFullYear()} Your Company Name. All rights reserved.</p>
+            </div>
+
+            <!-- Link Sections -->
+            <div class="footer-links">
+                <!-- Company -->
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <a href="/about">About</a>
+                    <a href="/careers">Careers</a>
+                    <a href="/press">Press</a>
+                </div>
+
+                <!-- Support -->
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <a href="/account">Account</a>
+                    <a href="/help-center">Help Center</a>
+                    <a href="/contact">Contact</a>
+                </div>
+
+                <!-- Legals -->
+                <div class="footer-column">
+                    <h4>Legals</h4>
+                    <a href="/terms">Terms</a>
+                    <a href="/privacy-policy">Privacy Policy</a>
+                    <a href="/licensing">Licensing</a>
+                </div>
+            </div>
+        </footer>
+    `;
+}
+
+// Call the function immediately so footer renders on page load
+renderFooter();
+
+// Export if using modules
+export { renderFooter };
+
 /*
   Function to render the footer content into the page
       Select the footer element from the DOM

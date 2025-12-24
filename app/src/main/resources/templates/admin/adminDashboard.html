@@ -1,3 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+
+    <!-- CSS Links -->
+    <link rel="stylesheet" th:href="@{/assets/css/adminDashboard.css}">
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}">
+
+    <!-- JS Utility and Rendering -->
+    <script th:src="@{/js/render.js}" defer></script>
+    <script th:src="@{/js/util.js}" defer></script>
+
+    <!-- Layout Components -->
+    <script th:src="@{/js/components/header.js}" defer></script>
+    <script th:src="@{/js/components/footer.js}" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="wrapper">
+            <!-- Header Placeholder -->
+            <div id="header"></div>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Search Bar -->
+                <input type="text" id="searchBar" placeholder="Search by doctor name" />
+
+                <!-- Filters -->
+                <div class="filters">
+                    <select id="timeFilter">
+                        <option value="">Sort by Time</option>
+                        <option value="morning">Morning</option>
+                        <option value="afternoon">Afternoon</option>
+                        <option value="evening">Evening</option>
+                    </select>
+
+                    <select id="specialtyFilter">
+                        <option value="">Filter by Specialty</option>
+                        <option value="cardiology">Cardiology</option>
+                        <option value="neurology">Neurology</option>
+                        <option value="pediatrics">Pediatrics</option>
+                        <option value="general">General</option>
+                        <!-- Add more specialties as needed -->
+                    </select>
+                </div>
+
+                <!-- Dynamic Doctor List -->
+                <div id="content"></div>
+            </main>
+
+            <!-- Footer Placeholder -->
+            <div id="footer"></div>
+        </div>
+    </div>
+
+    <!-- Hidden Modal for Adding Doctor -->
+    <div id="modal" class="modal">
+        <span id="closeModal" class="close">&times;</span>
+        <div id="modal-body"></div>
+    </div>
+
+    <!-- Admin Dashboard Services & Doctor Card Components -->
+    <script type="module" src="../js/services/adminDashboard.js" defer></script>
+    <script type="module" src="../js/components/doctorCard.js" defer></script>
+</body>
+</html>
+
 <!-- adminDashboard.html -->
 
 <!-- 

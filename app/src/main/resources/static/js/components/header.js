@@ -1,3 +1,90 @@
+// header.js
+
+// Function to render the header based on user role and token
+function renderHeader() {
+    // 1. Check if on homepage
+    if (window.location.pathname.endsWith("/")) {
+        localStorage.removeItem("userRole");
+        localStorage.removeItem("token");
+        return;
+    }
+
+    // 2. Get role and token from localStorage
+    const role = localStorage.getItem("userRole");
+    const token = localStorage.getItem("token");
+
+    // 3. Check for invalid session
+    if ((role === "loggedPatient" || role === "admin" || role === "doctor") && !token) {
+        localStorage.removeItem("userRole");
+        alert("Session expired or invalid login. Please log in again.");
+        window.location.href = "/";
+        return;
+    }
+
+    // 4. Prepare header HTML
+    let headerContent = "";
+
+    if (role === "admin") {
+        headerContent += `
+            <button id="addDocBtn" class="adminBtn">Add Doctor</button>
+            <a href="#" id="logoutBtn">Logout</a>
+        `;
+    } else if (role === "doctor") {
+        headerContent += `
+            <a href="/doctorDashboard" class="navBtn">Home</a>
+            <a href="#" id="logoutBtn">Logout</a>
+        `;
+    } else if (role === "patient") {
+        headerContent += `
+            <a href="/login" class="navBtn">Login</a>
+            <a href="/signup" class="navBtn">Sign Up</a>
+        `;
+    } else if (role === "loggedPatient") {
+        headerContent += `
+            <a href="/patientDashboard" class="navBtn">Home</a>
+            <a href="/appointments" class="navBtn">Appointments</a>
+            <a href="#" id="logoutBtn">Logout</a>
+        `;
+    }
+
+    // 5. Inject header into the DOM
+    const headerDiv = document.getElementById("header");
+    if (headerDiv) {
+        headerDiv.innerHTML = headerContent;
+        attachHeaderButtonListeners();
+    }
+}
+
+// 6. Attach event listeners to dynamic buttons
+function attachHeaderButtonListeners() {
+    const addDocBtn = document.getElementById("addDocBtn");
+    if (addDocBtn) {
+        addDocBtn.addEventListener("click", () => openModal("addDoctor"));
+    }
+
+    const logoutBtn = document.getElementById("logoutBtn");
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", logout);
+    }
+}
+
+// 7. Logout function for all users
+function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userRole");
+    window.location.href = "/";
+}
+
+// Optional: Logout for logged-in patient, retaining role as "patient"
+function logoutPatient() {
+    localStorage.removeItem("token");
+    localStorage.setItem("userRole", "patient");
+    window.location.href = "/patientDashboard";
+}
+
+// Export functions if using modules
+export { renderHeader, logout, logoutPatient };
+
 /*
   Step-by-Step Explanation of Header Section Rendering
 
