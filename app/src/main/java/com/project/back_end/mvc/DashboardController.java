@@ -24,7 +24,7 @@ public class DashboardController {
     }
 
     @GetMapping("/doctorDashboard/{token}")
-    public String adminDashboard(@PathVariable("token") String token) {
+    public String doctorDashboard(@PathVariable("token") String token) {
         boolean isValid = tokenService.validateToken(token, "doctor");
 
         if (isValid) {
