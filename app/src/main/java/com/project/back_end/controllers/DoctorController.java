@@ -3,7 +3,7 @@ package com.project.back_end.controllers;
 
 import com.project.back_end.DTO.Login;
 import com.project.back_end.models.Doctor;
-import com.project.back_end.services.AuthService;
+import com.project.back_end.services.Service;
 import com.project.back_end.services.DoctorService;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,14 +19,13 @@ import java.util.Map;
 public class DoctorController {
 
     private final DoctorService doctorService;
-    private final AuthService authService;
+    private final Service service;
 
-    public DoctorController(DoctorService doctorService, AuthService authService) {
+    public DoctorController(DoctorService doctorService, Service service) {
         this.doctorService = doctorService;
-        this.authService = authService;
+        this.service = service;
     }
 
-    // 3. Get doctor availability
     @GetMapping("/availability/{user}/{doctorId}/{date}")
     public ResponseEntity<Map<String, Object>> getDoctorAvailability(
             @PathVariable String user,
@@ -34,7 +33,7 @@ public class DoctorController {
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @RequestHeader("Authorization") String token
     ) {
-        ResponseEntity<Map<String, String>> validation = authService.validateToken(token, user);
+        ResponseEntity<Map<String, String>> validation = service.validateToken(token, user);
         if (validation.getStatusCode().is4xxClientError()) {
             return ResponseEntity.status(validation.getStatusCode())
                     .body(Map.of("message", validation.getBody().get("message")));
@@ -57,7 +56,7 @@ public class DoctorController {
             @RequestBody @Valid Doctor doctor,
             @RequestHeader("Authorization") String token
     ) {
-        ResponseEntity<Map<String, String>> validation = authService.validateToken(token, "admin");
+        ResponseEntity<Map<String, String>> validation = service.validateToken(token, "admin");
         if (validation.getStatusCode().is4xxClientError()) {
             return ResponseEntity.status(validation.getStatusCode())
                     .body(Map.of("message", validation.getBody().get("message")));
@@ -84,7 +83,7 @@ public class DoctorController {
             @RequestBody @Valid Doctor doctor,
             @RequestHeader("Authorization") String token
     ) {
-        ResponseEntity<Map<String, String>> validation = authService.validateToken(token, "admin");
+        ResponseEntity<Map<String, String>> validation = service.validateToken(token, "admin");
         if (validation.getStatusCode().is4xxClientError()) {
             return ResponseEntity.status(validation.getStatusCode())
                     .body(Map.of("message", validation.getBody().get("message")));
@@ -105,7 +104,7 @@ public class DoctorController {
             @PathVariable long id,
             @RequestHeader("Authorization") String token
     ) {
-        ResponseEntity<Map<String, String>> validation = authService.validateToken(token, "admin");
+        ResponseEntity<Map<String, String>> validation = service.validateToken(token, "admin");
         if (validation.getStatusCode().is4xxClientError()) {
             return ResponseEntity.status(validation.getStatusCode())
                     .body(Map.of("message", validation.getBody().get("message")));
@@ -127,7 +126,7 @@ public class DoctorController {
             @PathVariable(required = false) String time,
             @PathVariable(required = false) String speciality
     ) {
-        Map<String, Object> result = authService.filterDoctor(name, speciality, time);
+        Map<String, Object> result = service.filterDoctor(name, speciality, time);
         return ResponseEntity.ok(result);
     }
 }

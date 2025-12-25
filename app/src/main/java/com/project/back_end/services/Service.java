@@ -7,14 +7,13 @@ import com.project.back_end.repo.DoctorRepository;
 import com.project.back_end.repo.PatientRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Service
-public class AuthService {
+@org.springframework.stereotype.Service
+public class Service {
 
     private final TokenService tokenService;
     private final AdminRepository adminRepository;
@@ -23,12 +22,12 @@ public class AuthService {
     private final DoctorService doctorService;
     private final PatientService patientService;
 
-    public AuthService(TokenService tokenService,
-                       AdminRepository adminRepository,
-                       DoctorRepository doctorRepository,
-                       PatientRepository patientRepository,
-                       DoctorService doctorService,
-                       PatientService patientService) {
+    public Service(TokenService tokenService,
+                   AdminRepository adminRepository,
+                   DoctorRepository doctorRepository,
+                   PatientRepository patientRepository,
+                   DoctorService doctorService,
+                   PatientService patientService) {
         this.tokenService = tokenService;
         this.adminRepository = adminRepository;
         this.doctorRepository = doctorRepository;
@@ -85,7 +84,6 @@ public class AuthService {
         return patientRepository.findByEmailOrPhone(patient.getEmail(), patient.getPhone()) == null;
     }
 
-    // ------------------ 6️⃣ Validate Patient Login ------------------
     public ResponseEntity<Map<String, String>> validatePatientLogin(Login login) {
         Map<String, String> response = new HashMap<>();
         Patient patient = patientRepository.findByEmail(login.getEmail());

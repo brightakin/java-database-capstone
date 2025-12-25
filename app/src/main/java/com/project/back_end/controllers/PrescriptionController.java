@@ -2,7 +2,7 @@ package com.project.back_end.controllers;
 
 import com.project.back_end.models.Prescription;
 import com.project.back_end.services.AppointmentService;
-import com.project.back_end.services.AuthService;
+import com.project.back_end.services.Service;
 import com.project.back_end.services.PrescriptionService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +15,12 @@ import java.util.Map;
 public class PrescriptionController {
 
     private final PrescriptionService prescriptionService;
-    private final AuthService authService;
+    private final Service service;
     private final AppointmentService appointmentService;
 
-    public PrescriptionController(PrescriptionService prescriptionService, AuthService authService, AppointmentService appointmentService) {
+    public PrescriptionController(PrescriptionService prescriptionService, Service service, AppointmentService appointmentService) {
         this.prescriptionService = prescriptionService;
-        this.authService = authService;
+        this.service = service;
         this.appointmentService = appointmentService;
     }
 
@@ -31,7 +31,7 @@ public class PrescriptionController {
             @RequestHeader("Authorization") String token
     ) {
         // Validate token for doctor role
-        ResponseEntity<Map<String, String>> validation = authService.validateToken(token, "doctor");
+        ResponseEntity<Map<String, String>> validation = service.validateToken(token, "doctor");
         if (validation.getStatusCode().is4xxClientError()) {
             return ResponseEntity.status(validation.getStatusCode())
                     .body(Map.of("message", validation.getBody().get("message")));
@@ -51,7 +51,7 @@ public class PrescriptionController {
             @RequestHeader("Authorization") String token
     ) {
         // Validate token for doctor role
-        ResponseEntity<Map<String, String>> validation = authService.validateToken(token, "doctor");
+        ResponseEntity<Map<String, String>> validation = service.validateToken(token, "doctor");
         if (validation.getStatusCode().is4xxClientError()) {
             return ResponseEntity.status(validation.getStatusCode())
                     .body(Map.of("message", validation.getBody().get("message")));

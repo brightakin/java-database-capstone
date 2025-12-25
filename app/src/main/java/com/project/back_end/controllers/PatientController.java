@@ -2,7 +2,7 @@ package com.project.back_end.controllers;
 
 import com.project.back_end.DTO.Login;
 import com.project.back_end.models.Patient;
-import com.project.back_end.services.AuthService;
+import com.project.back_end.services.Service;
 import com.project.back_end.services.PatientService;
 import com.project.back_end.services.TokenService;
 import jakarta.validation.Valid;
@@ -16,19 +16,19 @@ import java.util.Map;
 public class PatientController {
 
     private final PatientService patientService;
-    private final AuthService authService;
+    private final Service service;
     private final TokenService tokenService;
 
-    public PatientController(PatientService patientService, AuthService authService, TokenService tokenService) {
+    public PatientController(PatientService patientService, Service service, TokenService tokenService) {
         this.patientService = patientService;
-        this.authService = authService;
+        this.service = service;
         this.tokenService = tokenService;
     }
 
     // 3. Get patient details
     @GetMapping
     public ResponseEntity<Map<String, Object>> getPatient(@RequestHeader("Authorization") String token) {
-        ResponseEntity<Map<String, String>> validation = authService.validateToken(token, "patient");
+        ResponseEntity<Map<String, String>> validation = service.validateToken(token, "patient");
         if (validation.getStatusCode().is4xxClientError()) {
             return ResponseEntity.status(validation.getStatusCode())
                     .body(Map.of("message", validation.getBody().get("message")));
@@ -40,7 +40,7 @@ public class PatientController {
     // 4. Create new patient
     @PostMapping
     public ResponseEntity<Map<String, String>> createPatient(@RequestBody @Valid Patient patient) {
-        boolean isValid = authService.validatePatient(patient);
+        boolean isValid = service.validatePatient(patient);
         if (!isValid) {
             return ResponseEntity.status(409).body(Map.of("message", "Patient already exists"));
         }
@@ -55,7 +55,7 @@ public class PatientController {
     // 5. Patient login
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody @Valid Login login) {
-        return authService.validatePatientLogin(login);
+        return service.validatePatientLogin(login);
     }
 
     // 6. Get patient appointments
@@ -64,7 +64,7 @@ public class PatientController {
             @PathVariable Long id,
             @RequestHeader("Authorization") String token
     ) {
-        ResponseEntity<Map<String, String>> validation = authService.validateToken(token, "patient");
+        ResponseEntity<Map<String, String>> validation = service.validateToken(token, "patient");
         if (validation.getStatusCode().is4xxClientError()) {
             return ResponseEntity.status(validation.getStatusCode())
                     .body(Map.of("message", validation.getBody().get("message")));
@@ -80,13 +80,13 @@ public class PatientController {
             @RequestParam(required = false) String name,
             @RequestHeader("Authorization") String token
     ) {
-        ResponseEntity<Map<String, String>> validation = authService.validateToken(token, "patient");
+        ResponseEntity<Map<String, String>> validation = service.validateToken(token, "patient");
         if (validation.getStatusCode().is4xxClientError()) {
             return ResponseEntity.status(validation.getStatusCode())
                     .body(Map.of("message", validation.getBody().get("message")));
         }
 
-        return authService.filterPatient(condition, name, token);
+        return service.filterPatient(condition, name, token);
     }
 }
 

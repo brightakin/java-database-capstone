@@ -2,7 +2,7 @@
 package com.project.back_end.controllers;
 
 import com.project.back_end.models.Admin;
-import com.project.back_end.services.AuthService;
+import com.project.back_end.services.Service;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,15 +15,15 @@ import java.util.Map;
 @RequestMapping("${api.path}admin") // Base path for admin endpoints, configurable via application.properties
 public class AdminController {
 
-    private final AuthService authService;
+    private final Service service;
 
-    public AdminController(AuthService authService) {
-        this.authService = authService;
+    public AdminController(Service service) {
+        this.service = service;
     }
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> adminLogin(@RequestBody Admin admin) {
-        return authService.validateAdmin(admin);
+        return service.validateAdmin(admin);
     }
 
 }

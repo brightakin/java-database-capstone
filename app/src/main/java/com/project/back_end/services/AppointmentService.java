@@ -7,7 +7,6 @@ import com.project.back_end.repo.PatientRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,15 +15,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-@Service
+@org.springframework.stereotype.Service
 public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final TokenService tokenService;
     private final PatientRepository patientRepository;
     private final DoctorRepository doctorRepository;
     @Autowired
-    private AuthService authService;
-
+    private Service service;
 
     public AppointmentService(AppointmentRepository appointmentRepository, TokenService tokenService, PatientRepository patientRepository, DoctorRepository doctorRepository) {
         this.appointmentRepository = appointmentRepository;
@@ -54,7 +52,7 @@ public class AppointmentService {
             return ResponseEntity.badRequest().body(response);
         }
 
-       int validation = authService.validateAppointment(updatedAppointment);
+       int validation = service.validateAppointment(updatedAppointment);
         if (validation == -1) {
             response.put("message", "Doctor does not exist");
             return ResponseEntity.badRequest().body(response);
@@ -99,7 +97,6 @@ public class AppointmentService {
 
     public Map<String, Object> getAppointment(String pname, LocalDate date, String doctorName) {
 
-        // 1️⃣ Get doctor by name
         var doctorList = doctorRepository.findByNameLike(doctorName);
 
         if (doctorList == null || doctorList.isEmpty()) {

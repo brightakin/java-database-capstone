@@ -2,7 +2,7 @@ package com.project.back_end.controllers;
 
 import com.project.back_end.models.Appointment;
 import com.project.back_end.services.AppointmentService;
-import com.project.back_end.services.AuthService;
+import com.project.back_end.services.Service;
 import com.project.back_end.services.TokenService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,18 +15,17 @@ import java.util.Map;
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
-    private final AuthService authService;
+    private final Service service;
     private final TokenService tokenService;
             
     public AppointmentController(AppointmentService appointmentService,
-                                 AuthService authService,
+                                 Service service,
                                  TokenService tokenService) {
         this.appointmentService = appointmentService;
-        this.authService = authService;
+        this.service = service;
         this.tokenService = tokenService;
     }
 
-    // ------------------ 2️⃣ Get Appointments ------------------
     @GetMapping
     public ResponseEntity<Map<String, Object>> getAppointments(
             @RequestParam(required = false) String pname,
@@ -34,7 +33,7 @@ public class AppointmentController {
             @RequestHeader("Authorization") String token
     ) {
         // Validate token for doctor role
-        ResponseEntity<Map<String, String>> validation = authService.validateToken(token, "doctor");
+        ResponseEntity<Map<String, String>> validation = service.validateToken(token, "doctor");
         if (validation.getStatusCode().is4xxClientError()) {
             return ResponseEntity.status(validation.getStatusCode()).body(Map.of("message", validation.getBody().get("message")));
         }
@@ -44,14 +43,13 @@ public class AppointmentController {
         return ResponseEntity.ok(appointments);
     }
 
-    // ------------------ 3️⃣ Book Appointment ------------------
     @PostMapping("/book")
     public ResponseEntity<Map<String, String>> bookAppointment(
             @RequestBody Appointment appointment,
             @RequestHeader("Authorization") String token
     ) {
         // Validate token for patient role
-        ResponseEntity<Map<String, String>> validation = authService.validateToken(token, "patient");
+        ResponseEntity<Map<String, String>> validation = service.validateToken(token, "patient");
         if (validation.getStatusCode().is4xxClientError()) {
             return ResponseEntity.status(validation.getStatusCode()).body(Map.of("message", validation.getBody().get("message")));
         }
@@ -70,7 +68,7 @@ public class AppointmentController {
             @RequestHeader("Authorization") String token
     ) {
         // Validate token for patient role
-        ResponseEntity<Map<String, String>> validation = authService.validateToken(token, "patient");
+        ResponseEntity<Map<String, String>> validation = service.validateToken(token, "patient");
         if (validation.getStatusCode().is4xxClientError()) {
             return ResponseEntity.status(validation.getStatusCode()).body(Map.of("message", validation.getBody().get("message")));
         }
@@ -84,7 +82,7 @@ public class AppointmentController {
             @RequestHeader("Authorization") String token
     ) {
         // Validate token for patient role
-        ResponseEntity<Map<String, String>> validation = authService.validateToken(token, "patient");
+        ResponseEntity<Map<String, String>> validation = service.validateToken(token, "patient");
         if (validation.getStatusCode().is4xxClientError()) {
             return ResponseEntity.status(validation.getStatusCode())
                     .body(Map.of("message", validation.getBody().get("message")));
