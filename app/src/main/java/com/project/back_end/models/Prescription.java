@@ -1,30 +1,46 @@
 package com.project.back_end.models;
 
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "prescriptions")
 public class Prescription {
+
     @Id
     private String id;
 
-    @Size(min = 3, max = 100, message = "Patient name must be between 3 and 100 character")
+    @NotNull(message = "Patient name is required")
+    @Size(min = 3, max = 100, message = "Patient name must be between 3 and 100 characters")
     private String patientName;
 
-    @NotNull(message = "Appointment id cannot be null")
-    private long appointmentId;
+    @NotNull(message = "Appointment ID is required")
+    private Long appointmentId;  // Reference to the Appointment entity's ID (Long type)
 
-    @Size(min = 3, max = 100, message = "Medication name must be between 3 and 100 character")
+    @NotNull(message = "Medication is required")
+    @Size(min = 3, max = 100, message = "Medication must be between 3 and 100 characters")
     private String medication;
 
-    @Size(min = 3, max = 100, message = "Dosage must be between 3 and 100 character")
+    @NotNull(message = "Dosage is required")
     private String dosage;
 
-    @Size(max = 200, message = "Notes must be a maximum of 200 characters")
+    @Size(max = 200, message = "Doctor notes cannot exceed 200 characters")
     private String doctorNotes;
 
+
+    // Constructors, getters, and setters
+    public Prescription(String patientName, String medication, String dosage, String doctorNotes, Long appointmentId) {
+        this.patientName = patientName;
+        this.medication = medication;
+        this.dosage = dosage;
+        this.doctorNotes = doctorNotes;
+        this.appointmentId = appointmentId;
+    }
+
+    public Prescription() {}
+
+    // Getters and Setters
     public String getId() {
         return id;
     }
@@ -39,14 +55,6 @@ public class Prescription {
 
     public void setPatientName(String patientName) {
         this.patientName = patientName;
-    }
-
-    public long getAppointmentId() {
-        return appointmentId;
-    }
-
-    public void setAppointmentId(long appointmentId) {
-        this.appointmentId = appointmentId;
     }
 
     public String getMedication() {
@@ -73,4 +81,11 @@ public class Prescription {
         this.doctorNotes = doctorNotes;
     }
 
+    public Long getAppointmentId() {
+        return appointmentId;
+    }
+
+    public void setAppointmentId(Long appointmentId) {
+        this.appointmentId = appointmentId;
+    }
 }

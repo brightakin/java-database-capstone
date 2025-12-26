@@ -1,47 +1,48 @@
 package com.project.back_end.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Entity
 public class Patient {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @NotBlank(message = "Name cannot be empty")
-    @Size(min = 3, max = 100, message = "Name must be between 3 and 100 characters")
+    @NotNull(message = "Patient name cannot be null")
+    @Size(min = 3, max = 100, message = "Patient name should be between 3 and 100 characters")
     private String name;
 
-    @NotBlank(message = "Email must not be blank")
-    @Email(message = "Must be an email address")
+    @NotNull(message = "Email cannot be null")
+    @Email(message = "Invalid email format")
     private String email;
 
-    @NotBlank(message = "Password cannot be empty")
-    @Size(min = 6, message = "Password must be more than six character")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @NotNull(message = "Password cannot be null")
+    @Size(min = 6, message = "Password must be at least 6 characters long")
     private String password;
 
-    @NotBlank
-    @Pattern(regexp = "\\d{10}", message = "Phone number must be 10 digits")
+    @NotNull(message = "Phone number cannot be null")
+    @Pattern(regexp = "^[0-9]{10}$", message = "Phone number must be 10 digits long")
     private String phone;
 
-    @NotBlank(message = "Address cannot be empty")
-    @Size(max = 255, message = "Address cannot be more then 255 character")
+    @NotNull(message = "Address cannot be null")
+    @Size(max = 255, message = "Address should not exceed 255 characters")
     private String address;
 
-    public long getId() {
+    // Getters and Setters
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
