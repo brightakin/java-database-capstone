@@ -30,7 +30,7 @@ public class Service {
     private final PatientService patientService;
 
     public Service(TokenService tokenService, AdminRepository adminRepository, DoctorService doctorService,
-                   DoctorRepository doctorRepository, PatientRepository patientRepository,PatientService patientService) {
+            DoctorRepository doctorRepository, PatientRepository patientRepository,PatientService patientService) {
         this.tokenService = tokenService;
         this.adminRepository = adminRepository;
         this.doctorService = doctorService;
@@ -178,7 +178,7 @@ public class Service {
         {
             return patientService.getPatientAppointment(patientId,token);
         }
-
+        
 
     }
 
