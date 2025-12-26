@@ -17,12 +17,10 @@ public class PatientController {
 
     private final PatientService patientService;
     private final Service service;
-    private final TokenService tokenService;
 
     public PatientController(PatientService patientService, Service service, TokenService tokenService) {
         this.patientService = patientService;
         this.service = service;
-        this.tokenService = tokenService;
     }
 
     // 3. Get patient details
