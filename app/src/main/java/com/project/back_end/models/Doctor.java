@@ -48,7 +48,6 @@ public class Doctor {
     private List<String> availableTimes; // e.g., ["09:00-10:00", "10:00-11:00", ...]
 
 
-
     // Getters and Setters
     public Long getId() {
         return id;
